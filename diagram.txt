@@ -1,0 +1,134 @@
+@startuml
+
+enum Marker {
+	X
+	O
+	None
+}
+
+class Slot {
+	-Marker marker
+	+bool IsAvailable
+	+Marker Value
+	+override string ToString()
+	+static bool operator ==(Slot a, Marker b)
+    +public static bool operator !=(Slot a, Marker b)
+}
+
+class GameBoard {
+	-const int Size = 3;
+	-Slot[] _slots
+	+GameBoard()
+	+Slot this[int x, int y]
+	+List<Position> GetAvailableSlotPositions()
+	+void PlaceMarker(Position position, Marker marker)
+	+void PlaceMarker(int x, int y, Marker marker)
+	+string Render()
+}
+
+abstract class Player {
+	#Marker _marker
+	#Player(Marker marker)
+	+Marker Marker
+	-int _score
+	+int Score
+	+void PlaceMarker(GameBoard gameBoard)
+	#{abstract}Position GetPosition(GameBoard gameBoard)
+	+void IncreaseScore()
+}
+
+class Game {
+	-Judger _judger
+	+Player Opponent
+    +Player Player;
+    +Player CurrentPlayer;
+    +DrawState DrawState;
+    +GameBoard GameBoard;
+    +GameOverState GameOverState;
+    +PlayState PlayState;
+    +WonState WonState;
+	+Game(Player player, Player opponent)
+	+int AvailableMarkers
+	+GameState CurrentGameState
+	+void MarkerAddedToGameBoard()
+	+void SetState(GameState state)
+	+void SwitchCurrentPlayer()
+	+void Print()
+	+void Play()
+	+void PlayInfinite()
+	+string Render()
+	+void Reset()
+	
+}
+
+Slot *-Marker
+GameBoard *-Slot
+GameBoard *--SlotUnAvailableException
+Game *-- PlayState
+Game *-- GameOverState
+Game *-- WonState
+Game *-- DrawState
+Game <|-- GameState
+Game *-- Player
+Player o-- ConsolePlayer
+Player o-- ComputerPlayer
+Game *- GameBoard
+Game *- Judger
+Judger *- ThreeInRowChecker
+ThreeInRowChecker o-- DiagonalBottomLeftToTopRight
+ThreeInRowChecker o-- DiagonalTopLeftToBottomRight
+ThreeInRowChecker o-- HorizontalBottom
+ThreeInRowChecker o-- HorizontalCenter
+ThreeInRowChecker o-- HorizontalTop
+ThreeInRowChecker o-- VerticalCenter
+ThreeInRowChecker o-- VerticalLeft
+ThreeInRowChecker o-- VerticalRight
+GameState o- GameOverState
+GameState o- PlayState
+
+class Judger {
+	-ThreeInRowChecker _threeInRowChecker
+	+Judger()
+	+void Judge(Game game) 
+	-bool IsThreeInRow(Game game)
+	-void PlayerWon(Game game)
+	-void Draw(Game game)
+	-bool IsDraw(Game game)
+}
+
+abstract class GameState {
+	+{abstract} void SwitchCurrentPlayer(Game game)
+	+{abstract} void Play(Game game)
+	+{abstract} string Render(Game game)
+}
+
+class GameOverState {
+	+void Play(Game game)
+	+string Render(Game game)
+}
+
+class WonState {
+	+void Play(Game game)
+	+string Render(Game game)
+}
+
+class DrawState {
+	+void Play(Game game)
+	+string Render(Game game)
+}
+
+class PlayState {
+	+void SwitchCurrentPlayer()
+	+void Play(Game game)
+	+sting Render(Game game)
+}
+
+class ThreeInRowChecker {
+	#ThreeInRowChecker Next
+	+{static} Create()
+	+ThreeInRowChecker RegisterNext(ThreeInRowChecker next)
+	+{abstract} bool? Check(GameBoard gameBoard, Marker marker)
+	#{abstract} bool Validate(GameBoard gameBoard, Marker marker)
+}
+
+@enduml
