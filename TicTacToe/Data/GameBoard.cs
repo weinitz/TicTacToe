@@ -24,12 +24,12 @@ namespace TicTacToe.Data
 
         public List<Position> GetAvailableSlotPositions()
         {
-            var possibleMoves = new List<Position>();
+            var availableSlotPositions = new List<Position>();
             for (var x = 0; x < Size; x++)
             for (var y = 0; y < Size; y++)
                 if (this[x, y].IsAvailable)
-                    possibleMoves.Add(new Position(x, y));
-            return possibleMoves;
+                    availableSlotPositions.Add(new Position(x, y));
+            return availableSlotPositions;
         }
 
         public void PlaceMarker(Position position, Marker marker)
