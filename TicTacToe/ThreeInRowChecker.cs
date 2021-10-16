@@ -28,7 +28,10 @@ namespace TicTacToe
             return Next;
         }
 
-        public abstract bool? Check(GameBoard gameBoard, Marker marker);
+        public bool? Check(GameBoard gameBoard, Marker marker)
+        {
+            return Validate(gameBoard, marker) ? true : Next?.Check(gameBoard, marker);
+        }
 
         protected abstract bool Validate(GameBoard gameBoard, Marker marker);
     }
