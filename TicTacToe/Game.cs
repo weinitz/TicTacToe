@@ -70,10 +70,10 @@ namespace TicTacToe
 
         public void PlayInfinite()
         {
-            do
+            while(true)
             {
                 Play();
-            } while (CurrentGameState is GameOverState);
+            }
         }
 
         public void Reset()
