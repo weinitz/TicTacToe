@@ -31,7 +31,7 @@ namespace TicTacToe
 
         public int AvailableMarkers { get; private set; }
 
-        public GameState CurrentGameState { get; private set; }
+        public GameState CurrentState { get; private set; }
 
         public void MarkerAddedToGameBoard()
         {
@@ -42,17 +42,17 @@ namespace TicTacToe
 
         public void SetState(GameState state)
         {
-            CurrentGameState = state;
+            CurrentState = state;
         }
 
         public void SwitchCurrentPlayer()
         {
-            CurrentGameState.SwitchCurrentPlayer(this);
+            CurrentState.SwitchCurrentPlayer(this);
         }
 
         public string Render()
         {
-            return CurrentGameState.Render(this);
+            return CurrentState.Render(this);
         }
 
         public void Print()
@@ -65,7 +65,7 @@ namespace TicTacToe
         public void Play()
         {
             Print();
-            CurrentGameState.Play(this);
+            CurrentState.Play(this);
         }
 
         public void PlayInfinite()
@@ -73,13 +73,13 @@ namespace TicTacToe
             do
             {
                 Play();
-            } while (CurrentGameState is GameOverState);
+            } while (CurrentState is GameOverState);
         }
 
         public void Reset()
         {
             CurrentPlayer = Player;
-            CurrentGameState = PlayState;
+            CurrentState = PlayState;
             AvailableMarkers = 3 * 3;
             GameBoard = new GameBoard();
         }
